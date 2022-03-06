@@ -1,0 +1,87 @@
+/* 全体 */
+
+/* 入力要素をまとめて初期化 */
+button, input, select, textarea {
+    padding: 3px;
+    border: 2px solid #888;
+    font-family : inherit;
+    font-size   : 100%;
+  }
+  
+  select {
+    color: black;
+  }
+
+  option {
+    color: black;
+  }
+
+  button{
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+  
+  body {
+    width: 800px;
+    margin: 0 auto;
+    background-color: #ded;
+    font-family : sans-serif; 
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  /*           */
+  /* inputarea */
+  /*           */
+  
+  .inputarea {
+    width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* row class */
+  .inputarea .row {
+    margin: 10px 0;
+  }
+  
+  /* button */
+  .inputarea button {
+    padding: 3px 20px;
+    background-color: #44f;
+    font-size:1.2em;
+  }
+  
+  /* タイトルと概要 */
+  .inputarea #tasktitle, #taskdetail {
+    width: 500px;
+  }
+  
+  /*              */
+  /* tasklistarea */
+  /*              */
+  
+  /* table */
+  .tasklistarea table {
+    width: 100%;
+  }
+  
+  /* th */
+  .tasklistarea th {
+    background-color: #277;
+    color: #fff;
+  }
+  
+  /* button */
+  .tasklistarea button {
+    display: block;  
+    margin: 0 auto;  
+    background-color: #444;
+  }
