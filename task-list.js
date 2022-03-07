@@ -33,6 +33,8 @@ function addTask(x) {
     tasks.push(x);
     console.log(tasks);
     displayTaskList();
+    storeTasks(tasks);
+    console.log(localStorage);
 }
 
 
@@ -44,6 +46,7 @@ function addTask(x) {
 function deleteTask(deleteIndex){
     tasks = tasks.splice(deleteIndex);   //spliceも配列オブジェクトの組み込みメソッド
     displayTaskList();
+    localStorage.removeItem(i);
 }
 
 
@@ -94,17 +97,49 @@ function displayTaskList() {
     };
 }
 
-//HTML作成時に記述したサンプルデータをtaskListTbodyに登録する
-function addSample() {
-    let task = {
-        month : "2021-07",
-        status : "済",
-        title : "A社経営統合プロジェクト",
-        detail : "統合計画に伴う業務プロセス統合プロジェクト。\nプロジェクトリーダー(メンバー4人)として担当。\nQDC目標いずれも達成。 CS評価で5をいただいた。"
-    };
-    addTask(task);
+//一回目にブラウザを読み込んだときは以下の処理をする。
+if (localStorage.length === 0) {
+    //HTML作成時に記述したサンプルデータをtaskListTbodyに登録する
+    function addSample() {
+       let task = {
+           month : "2021-07",
+           status : "済",
+           title : "A社経営統合プロジェクト",
+           detail : "統合計画に伴う業務プロセス統合プロジェクト。\nプロジェクトリーダー(メンバー4人)として担当。\nQDC目標いずれも達成。 CS評価で5をいただいた。"
+       };
+       addTask(task);
+    }
+
+    //addSampleを呼んでおく
+
+    addSample();
 }
 
-//addSampleを呼んでおく
+/** tasksを受け取って、その要素をストレージに保存する
+ * @param {array} tasks
+ * 
+ */
 
-addSample();
+ function storeTasks(tasks) {
+     //初期化
+    localStorage.clear
+
+     for(let i = 0; i < tasks.length; i++){
+        const taskJSON = JSON.stringify(tasks[i])
+        localStorage.setItem(i , taskJSON);
+     }
+}
+
+
+
+/**
+ * localStorageから、保存しておいたリストを呼ぶ
+ * 
+ * 
+ */
+function callLocal() {
+    for (let i = 0; i < localStorage.length; i++){
+    const tasksParse = JSON.parse(localStorage.getItem(i));
+    tasks.push(tasksParse);
+    }
+}
