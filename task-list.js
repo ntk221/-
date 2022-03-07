@@ -45,8 +45,8 @@ function addTask(x) {
  */
 function deleteTask(deleteIndex){
     tasks = tasks.splice(deleteIndex);   //spliceも配列オブジェクトの組み込みメソッド
+    localStorage.removeItem(deleteIndex);
     displayTaskList();
-    localStorage.removeItem(i);
 }
 
 
@@ -97,7 +97,8 @@ function displayTaskList() {
     };
 }
 
-//一回目にブラウザを読み込んだときは以下の処理をする。
+//一回目にブラウザを読み込んだときはサンプルをtasksに追加して表示する。そうでないときは、ストレージに保存したタスクを追加して表示する
+
 if (localStorage.length === 0) {
     //HTML作成時に記述したサンプルデータをtaskListTbodyに登録する
     function addSample() {
@@ -111,8 +112,14 @@ if (localStorage.length === 0) {
     }
 
     //addSampleを呼んでおく
-
     addSample();
+
+} else {
+    for (let i = 0; i < localStorage.length; i++) {
+        const tasksParse = JSON.parse(localStorage.getItem(i));
+        tasks.push(tasksParse);
+    }
+    displayTaskList(tasks);
 }
 
 /** tasksを受け取って、その要素をストレージに保存する
@@ -120,7 +127,7 @@ if (localStorage.length === 0) {
  * 
  */
 
- function storeTasks(tasks) {
+ function storeTasks() {
      //初期化
     localStorage.clear
 
@@ -131,16 +138,4 @@ if (localStorage.length === 0) {
 }
 
 
-
-/**
- * localStorageから、保存しておいたリストを呼ぶ
- * 
- * 
- */
-function callLocal() {
-    for (let i = 0; i < localStorage.length; i++){
-    const tasksParse = JSON.parse(localStorage.getItem(i));
-    tasks.push(tasksParse);
-    }
-}
 
