@@ -21,8 +21,8 @@ submitButton.onclick = () => {
         title : taskTitle.value,
         detail : taskDetail.value
     }
-    console.log(task);
     addTask(task);
+    updateStorage();
 };
 
 /** taskを受け取って、tasks配列に追加する
@@ -31,23 +31,40 @@ submitButton.onclick = () => {
  */
 function addTask(x) {
     tasks.push(x);
-    console.log(tasks);
     displayTaskList();
-    storeTasks(tasks);
-    console.log(localStorage);
 }
 
 
-//削除するtaskの添え数deleteIndexを受け取り、tasksの対応するtaskを削除する
+//削除するtaskの添え数deleteIndexを受け取り、tasksとlocalStorageから対応するtaskを削除して、displayTaskListを呼ぶ
 /**
  * @param  {int} deleteIndex
  * @return tasks
  */
 function deleteTask(deleteIndex){
-    tasks = tasks.splice(deleteIndex);   //spliceも配列オブジェクトの組み込みメソッド
-    localStorage.removeItem(deleteIndex);
+    tasks.splice(deleteIndex,1);   //spliceも配列オブジェクトの組み込みメソッド
+    updateStorage();
     displayTaskList();
 }
+
+
+ /** tasksを受け取って、その要素をストレージに保存する
+ * @param {array} tasks
+ * @return localStrage
+ */
+
+  function updateStorage() {
+    //初期化
+   localStorage.clear();
+
+    for(let i = 0; i < tasks.length; i++){
+       const taskJSON = JSON.stringify(tasks[i]);
+       localStorage.setItem(i , taskJSON);
+    }
+}
+
+// localStrageに保存されているtaskの添え数を受け取り、対応するtaskを削除する
+
+
 
 
 //tasksの情報をtaskListTbodyに移して、それを表示する
@@ -57,28 +74,23 @@ function displayTaskList() {
 
     for(let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
-        console.log(task);
         let taskTr = document.createElement('tr');
         let taskTd = document.createElement('td');
 
         
         taskTd.innerText = task.month;
-        console.log(taskTd.innerText);
         taskTr.appendChild(taskTd);
 
         taskTd = document.createElement('td');
         taskTd.innerText = task.status;
-        console.log(taskTd.innerText);
         taskTr.appendChild(taskTd);
 
         taskTd = document.createElement('td');
         taskTd.innerText = task.title;
-        console.log(taskTd.innerText);
         taskTr.appendChild(taskTd);
 
         taskTd = document.createElement('td');
         taskTd.innerText = task.detail;
-        console.log(taskTd.innerText);
         taskTr.appendChild(taskTd);
 
         //削除ボタンを作成する
@@ -92,50 +104,41 @@ function displayTaskList() {
         }
         deleteTd.appendChild(deleteButton);
         taskTr.appendChild(deleteTd);
-        console.log(taskTr);
         taskListTbody.appendChild(taskTr);
     };
 }
 
+//HTML作成時に記述したサンプルデータをtaskListTbodyに登録する
+function addSample() {
+    let task = {
+        month : "2021-07",
+        status : "済",
+        title : "A社経営統合プロジェクト",
+        detail : "統合計画に伴う業務プロセス統合プロジェクト。\nプロジェクトリーダー(メンバー4人)として担当。\nQDC目標いずれも達成。 CS評価で5をいただいた。"
+    };
+    addTask(task);
+ }
+
+
 //一回目にブラウザを読み込んだときはサンプルをtasksに追加して表示する。そうでないときは、ストレージに保存したタスクを追加して表示する
 
+function loadBrowser() {
 if (localStorage.length === 0) {
-    //HTML作成時に記述したサンプルデータをtaskListTbodyに登録する
-    function addSample() {
-       let task = {
-           month : "2021-07",
-           status : "済",
-           title : "A社経営統合プロジェクト",
-           detail : "統合計画に伴う業務プロセス統合プロジェクト。\nプロジェクトリーダー(メンバー4人)として担当。\nQDC目標いずれも達成。 CS評価で5をいただいた。"
-       };
-       addTask(task);
-    }
-
-    //addSampleを呼んでおく
     addSample();
-
 } else {
-    for (let i = 0; i < localStorage.length; i++) {
-        const tasksParse = JSON.parse(localStorage.getItem(i));
-        tasks.push(tasksParse);
-    }
-    displayTaskList(tasks);
+    //初期化
+    tasks = [];
+     for (let i = 0; i < localStorage.length; i++) {
+        const taskParsed = JSON.parse(localStorage.getItem(i));
+        tasks.push(taskParsed);
+        displayTaskList(tasks);
+    };
+};
 }
 
-/** tasksを受け取って、その要素をストレージに保存する
- * @param {array} tasks
- * 
- */
+loadBrowser();
 
- function storeTasks() {
-     //初期化
-    localStorage.clear
 
-     for(let i = 0; i < tasks.length; i++){
-        const taskJSON = JSON.stringify(tasks[i])
-        localStorage.setItem(i , taskJSON);
-     }
-}
 
 
 
